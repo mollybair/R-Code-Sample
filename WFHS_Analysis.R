@@ -14,5 +14,30 @@ leef_df <- read_tsv("WFHS_Leef_Data.tsv")[leef_vars]
 names(tomo_df) <- tolower(names(tomo_df))
 names(leef_df) <- tolower(names(leef_df))
 
+### Merge Data ###
+tomo_df$tomo <- 1
+tomo_df$leef <- 0
+leef_df$leef <- 1
+leef_df$tomo <- 0
+wfhs_df <- rbind(tomo_df, leef_df)
+view(wfhs_df)
+
+### Aggregate Grouped Survey Answers ###
+wfhs_df$employee_control <- wfhs_df$wm_cwh1r + wfhs_df$wm_cwh2r + wfhs_df$wm_cwh3r +
+  wfhs_df$wm_cwh4r + wfhs_df$wm_cwh5r + wfhs_df$wm_cwh6r + wfhs_df$wm_cwh7r + wfhs_df$wm_cwh8r
+
+### Visualize Correlation ###
+ggplot(wfhs_df, mapping = aes(x = wm_cwh2r, y = wm_fssb1r, color = wave)) +
+  geom_point()
+
+
 view(tomo_df)
 view(leef_df)
+
+
+
+
+
+
+
+
