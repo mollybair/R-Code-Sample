@@ -14,6 +14,8 @@ leef_df <- read_tsv("WFHS_Leef_Data.tsv")[leef_vars]
 names(tomo_df) <- tolower(names(tomo_df))
 names(leef_df) <- tolower(names(leef_df))
 
+tomo_df$condition <- ifelse(tomo_df$condition == 1, 1, 0)
+
 ### Merge Data ###
 tomo_df$tomo <- 1
 tomo_df$leef <- 0
@@ -26,13 +28,8 @@ view(wfhs_df)
 wfhs_df$employee_control <- wfhs_df$wm_cwh1r + wfhs_df$wm_cwh2r + wfhs_df$wm_cwh3r +
   wfhs_df$wm_cwh4r + wfhs_df$wm_cwh5r + wfhs_df$wm_cwh6r + wfhs_df$wm_cwh7r + wfhs_df$wm_cwh8r
 
-### Visualize Correlation ###
-ggplot(wfhs_df, mapping = aes(x = wm_cwh2r, y = wm_fssb1r, color = wave)) +
-  geom_point()
+wfhs_df$fssb <- wfhs_df$wm_fssb1r + wfhs_df$wm_fssb3r + wfhs_df$wm_fssb4r + wfhs_df$wm_fssb5r
 
-
-view(tomo_df)
-view(leef_df)
 
 
 
