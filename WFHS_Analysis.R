@@ -39,24 +39,23 @@ wfhs_df$fssb <- rowSums(subset(wfhs_df, select = wm_fssb1r:wm_fssb5r), na.rm = T
   # higher value indicates greater family-supportive supervisor behavior (FSSB)
 
 ### Test Correlation Between Employee Choice and FSSB ###
-wfhs_pre_treat <- filter(wfhs_df, wave == 1)
-baseline_cor <- cor.test(wfhs_pre_treat$employee_control, wfhs_pre_treat$fssb, method = 'pearson')
-baseline_cor
-
 filter_cor_test <- function(df, new_df, val1, val2, cor_name) {
   new_df <- filter(df, wave == val1, condition == val2)
   cor_name <- cor.test(new_df$employee_control, new_df$fssb, method = 'pearson')
   cor_name
 }
 
+filter_cor_test(wfhs_df, wfhs_treat_wave1, 1, 1, treat_wave1_cor) # treatment group, baseline
 filter_cor_test(wfhs_df, wfhs_treat_wave2, 2, 1, treat_wave2_cor) # treatment group, 6 month follow up
 filter_cor_test(wfhs_df, wfhs_treat_wave3, 3, 1, treat_wave3_cor) # treatment group, 12 month follow up
 filter_cor_test(wfhs_df, wfhs_treat_wave4, 4, 1, treat_wave4_cor) # treatment group, 18 month follow up
 
+filter_cor_test(wfhs_df, wfhs_control_wave1, 1, 0, control_wave1_cor) # control group, baseline
 filter_cor_test(wfhs_df, wfhs_control_wave2, 2, 0, control_wave2_cor) # control group, 6 month follow up
 filter_cor_test(wfhs_df, wfhs_control_wave3, 3, 0, control_wave3_cor) # control group, 12 month follow up
 filter_cor_test(wfhs_df, wfhs_control_wave4, 4, 0, control_wave4_cor) # control group, 18 month follow up
 
+### Visualize Correlation Over Time ###
 
 
 
