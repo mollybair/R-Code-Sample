@@ -8,3 +8,6 @@ The following questions guide this analysis:
 1. Is there a correlation between an employee's degree of choice over their work hours and 
     the degree of family-supportive supervisor behaviors (FSSB) in their workplace?
 2. If such a correlation exists, how does the intervention affect it?
+
+I ran a correlation test for each wave for treatment and control, resulting in a total of 8 correlation
+tests. Every test had a significant result.

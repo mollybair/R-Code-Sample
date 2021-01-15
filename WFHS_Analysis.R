@@ -39,31 +39,35 @@ wfhs_df$fssb <- rowSums(subset(wfhs_df, select = wm_fssb1r:wm_fssb5r), na.rm = T
   # higher value indicates greater family-supportive supervisor behavior (FSSB)
 
 ### Test Correlation Between Employee Choice and FSSB ###
-filter_cor_test <- function(df, new_df, val1, val2, cor_name) {
+filter_cor_test <- function(df, val1, val2, cor_type) {
   new_df <- filter(df, wave == val1, condition == val2)
-  cor_name <- cor.test(new_df$employee_control, new_df$fssb, method = 'pearson')
-  cor_name
+  cor <- cor_type(new_df$employee_control, new_df$fssb, method = 'pearson')
+  return(cor)
 }
 
-filter_cor_test(wfhs_df, wfhs_treat_wave1, 1, 1, treat_wave1_cor) # treatment group, baseline
-filter_cor_test(wfhs_df, wfhs_treat_wave2, 2, 1, treat_wave2_cor) # treatment group, 6 month follow up
-filter_cor_test(wfhs_df, wfhs_treat_wave3, 3, 1, treat_wave3_cor) # treatment group, 12 month follow up
-filter_cor_test(wfhs_df, wfhs_treat_wave4, 4, 1, treat_wave4_cor) # treatment group, 18 month follow up
+treat_wave1_cor <- filter_cor_test(wfhs_df, 1, 1, cor.test) # treatment group, baseline
+treat_wave2_cor <- filter_cor_test(wfhs_df, 2, 1, cor.test) # treatment group, 6 month follow up
+treat_wave3_cor <- filter_cor_test(wfhs_df, 3, 1, cor.test) # treatment group, 12 month follow up
+treat_wave4_cor <- filter_cor_test(wfhs_df, 4, 1, cor.test) # treatment group, 18 month follow up
 
-filter_cor_test(wfhs_df, wfhs_control_wave1, 1, 0, control_wave1_cor) # control group, baseline
-filter_cor_test(wfhs_df, wfhs_control_wave2, 2, 0, control_wave2_cor) # control group, 6 month follow up
-filter_cor_test(wfhs_df, wfhs_control_wave3, 3, 0, control_wave3_cor) # control group, 12 month follow up
-filter_cor_test(wfhs_df, wfhs_control_wave4, 4, 0, control_wave4_cor) # control group, 18 month follow up
+control_wave1_cor <- filter_cor_test(wfhs_df, 1, 0, cor.test) # control group, baseline
+control_wave2_cor <- filter_cor_test(wfhs_df, 2, 0, cor.test) # control group, 6 month follow up
+control_wave3_cor <- filter_cor_test(wfhs_df, 3, 0, cor.test) # control group, 12 month follow up
+control_wave4_cor <- filter_cor_test(wfhs_df, 4, 0, cor.test) # control group, 18 month follow up
 
 ### Visualize Correlation Over Time ###
-
-
-
-
-
-
-
-
-
-
+treat_cor_coefs <- rep(NA, 4)
+control_cor_coefs <- rep(NA, 4)
+for (i in 1:4) {
+  treat_cor_coefs[i] <- filter_cor_test(wfhs_df, i, 1, cor)
+  control_cor_coefs[i] <- filter_cor_test(wfhs_df, i, 0, cor)
+}
+time <- c("Baseline", "6 Month Follow-Up", "12 Month Follow-Up", "18 Month Follow-Up")
+cor_df$time <- factor(cor_df$time, as.character(cor_df$time))
+ggplot(cor_df, mapping = aes(x = time)) +
+  geom_point(aes(y = treat_cor_coefs, color = "Treatment Group")) +
+  geom_point(aes(y = control_cor_coefs, color = "Control Group")) +
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 90)) +
+  labs(title = "Correlation Over Time", x = NULL, y = "Correlation Coefficient")
 
